@@ -12,4 +12,5 @@
 	</properties>
 
 
+	<packaging>pom</packaging>
 </project>
