@@ -6,17 +6,37 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://svn.apache.org/viewvc/maven</url>
+	</scm>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<java.ee.version>7.0</java.ee.version>
 
+		<logback.version>1.1.7</logback.version>
+
+		<!-- JEE API -->
+		<inject.version>1</inject.version>
+
 		<!-- base framework version -->
 		<rapidoid.version>5.1.9</rapidoid.version>
+		<undertow.version>2.0.0.Alpha1</undertow.version>
+		<jackson.version>2.7.0</jackson.version>
 
 		<!-- test lib -->
 		<testng.version>6.9.8</testng.version>
+		<h2.version>1.4.187</h2.version>
 
 	</properties>
 
@@ -24,6 +44,7 @@
 		<module>fastdev-core</module>
 		<module>fastdev-example</module>
 		<module>fastdev-rapidoid</module>
+		<module>fastdev-undertow</module>
 	</modules>
 
 	<dependencyManagement>
@@ -39,31 +60,81 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.fastdev</groupId>
+				<artifactId>fastdev-undertow</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- API -->
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${inject.version}</version>
+			</dependency>
+			
+			<!-- 比较常用的库 -->
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			 <dependency>
+		        <groupId>com.zaxxer</groupId>
+		        <artifactId>HikariCP</artifactId>
+		        <version>2.4.7</version>
+		    </dependency>
+		    <dependency>
+			    <groupId>commons-dbutils</groupId>
+			    <artifactId>commons-dbutils</artifactId>
+			    <version>1.6</version>
+			</dependency>
+			<dependency>
+			    <groupId>com.fasterxml.jackson.core</groupId>
+			    <artifactId>jackson-core</artifactId>
+			    <version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.undercouch</groupId>
+				<artifactId>bson4jackson</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+
+
+			<!-- 可选的项目Server库 -->
+			<dependency>
 				<groupId>org.rapidoid</groupId>
-				<artifactId>rapidoid-quick</artifactId>
+				<artifactId>rapidoid-http-server</artifactId>
 				<version>${rapidoid.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>javax</groupId>
-				<artifactId>javaee-api</artifactId>
-				<version>${java.ee.version}</version>
-				<scope>provided</scope>
+				<groupId>org.rapidoid</groupId>
+				<artifactId>rapidoid-http-fast</artifactId>
+				<version>${rapidoid.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>io.undertow</groupId>
+				<artifactId>undertow-core</artifactId>
+				<version>${undertow.version}</version>
+			</dependency>
+
+
 			<dependency>
 				<groupId>org.testng</groupId>
 				<artifactId>testng</artifactId>
 				<version>${testng.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.h2database</groupId>
+			  	<artifactId>h2</artifactId>
+			  	<version>${h2.version}</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
 
 </project>
