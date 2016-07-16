@@ -1,24 +1,17 @@
 package com.fastdev.example;
 
 import com.fastdev.core.Application;
-import com.fastdev.core.handler.Handler;
+import com.fastdev.core.config.Server;
 
 public class Main {
 
 	public static void main(String[] args) {
-	
+		
 		Application.builder()
-		.framework("rapidoid")
-		.scan(new String[]{Main.class.getPackage().getName()})
-		.addHandler(new Handler("/test",null,()->{
-			return "hello";
-		}))
-		.addHandler(new Handler("/world",null,()->{
-			return "world";
-		}))
+		.addDataSource("centralTrx", "jdbc:h2:mem:central" ,"","", "session.sql")
+		.server(Server.UNDERTOW)
 		.build()
 		.run();
-		
 		
 	}
 }

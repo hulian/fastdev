@@ -1,30 +1,51 @@
 package com.fastdev.core.config;
 
-import java.util.HashMap;
+import java.util.Properties;
 
-public class Config extends HashMap<String, Object>{
+/**
+ * 应用配置对象
+ * @author 	fastdev
+ * @since 	0.0.1
+ */
+public class Config extends Properties{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8802938048125097887L;
 	
+	/**
+	 * 命令行参数
+	 */
 	public static final String ARGS = "args";
 
-	public static final String FRAMEWORK = "framework";
+	/**
+	 * 框架名称
+	 */
+	public static final String SERVER = "server";
 
+	/**
+	 * 包扫描
+	 */
 	public static final String SCAN_PACKAGES="scanPackages";
 	
-	@SuppressWarnings("unchecked")
-	public <T> T get(String key , Class<?> T) {
-		
-		Object o = super.get(key);
-		if(o!=null){
-			return (T)o;
-		}
-		
-		return null;
-	}
-
+	/**
+	 * Server host
+	 */
+	public static final String SERVER_HOST = "server.host";
 	
+	/**
+	 * Server port
+	 */
+	public static final String SERVER_PORT = "server.port";
+	
+	/**
+	 * IO Thread 数量
+	 */
+	public static final String SERVER_IOTHREADS = "server.iothreads";
+	
+	/**
+	 * Worker Thread 数量
+	 */
+	public static final String SERVER_WORKERS = "server.workers";
 }

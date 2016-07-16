@@ -6,29 +6,26 @@
 		<artifactId>fastdev</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>fastdev-core</artifactId>
+	<artifactId>fastdev-undertow</artifactId>
+
+
 	<dependencies>
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
+			<groupId>com.fastdev</groupId>
+			<artifactId>fastdev-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
+			<groupId>de.undercouch</groupId>
+			<artifactId>bson4jackson</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
+			<groupId>io.undertow</groupId>
+			<artifactId>undertow-core</artifactId>
 		</dependency>
 	</dependencies>
+
 </project>
