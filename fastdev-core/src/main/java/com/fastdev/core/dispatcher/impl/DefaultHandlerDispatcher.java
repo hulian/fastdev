@@ -43,20 +43,20 @@ public class DefaultHandlerDispatcher implements Dispatcher{
 			String handlerName = (String) params.get(Params.HANDLER);
 			
 			if(StringUtil.isEmpty(handlerName)){
-				return Code.HANDLER_EMPTY.getIdAndMsg();
+				return Code.HANDLER_EMPTY.toObject();
 			}
 			
 			Handler handler = handlers.get(handlerName);
 			
 			if( handler==null ){
-				return Code.HANDLER_NOT_FOUND.getIdAndMsg(handlerName);
+				return Code.HANDLER_NOT_FOUND.toObject(handlerName);
 			}
 			
 			
 			for( Interceptor interceptor : interceptors ){
 				Code code = interceptor.intercept(params, handler,rolesAllowed.get(handlerName));
 				if(!code.equals(Code.SUCCESS)){
-					return code.getIdAndMsg(); 
+					return code.toObject(); 
 				}
 			}
 			
@@ -66,7 +66,7 @@ public class DefaultHandlerDispatcher implements Dispatcher{
 			logger.error("application error",e);
 		}
 		
-		return Code.UNKNOWN_ERROR.getIdAndMsg();
+		return Code.UNKNOWN_ERROR.toObject();
 		
 	}
 

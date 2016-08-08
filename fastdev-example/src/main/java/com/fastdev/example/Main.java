@@ -7,8 +7,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		Application.builder()
-		.addDataSource("centralTrx", "jdbc:h2:mem:central" ,"","", "session.sql")
+		Application.builder().loadConfig("config.properties")
 		.server(Server.UNDERTOW)
 		.build()
 		.run();

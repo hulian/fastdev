@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fastdev.core.dispatcher.Dispatcher;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.undercouch.bson4jackson.BsonFactory;
 import io.undertow.server.HttpHandler;
@@ -29,6 +30,7 @@ public class DispatcherHandler  implements HttpHandler {
 	private ObjectMapper jsonObjectMapper = new ObjectMapper();
 	
 	public DispatcherHandler(Dispatcher dispatcher) {
+		 this.jsonObjectMapper.setSerializationInclusion(Include.NON_NULL);
 		 this.dispatcher = dispatcher;
 		 this.formParserFactory = FormParserFactory.builder().build();
 	}

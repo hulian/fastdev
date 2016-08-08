@@ -1,5 +1,7 @@
 package com.fastdev.core;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -8,10 +10,8 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.fastdev.core.config.Config;
 import com.fastdev.core.config.DefaultConfig;
 import com.fastdev.core.config.Server;
@@ -21,14 +21,16 @@ import com.fastdev.core.injector.Injector;
 import com.fastdev.core.injector.impl.InjectorImpl;
 import com.fastdev.core.injector.impl.ScannerImpl;
 import com.fastdev.core.interceptor.Interceptor;
-import com.fastdev.core.interceptor.impl.DefaultSecurityInterceptor;
+import com.fastdev.core.interceptor.impl.DistributeTokenInterceptor;
 import com.fastdev.core.server.ServerProvider;
 import com.fastdev.core.session.SessionStorage;
 import com.fastdev.core.session.impl.DefaultSessionStorage;
 import com.fastdev.core.sql.SqlRunner;
 import com.fastdev.core.transaction.TransactionManager;
 import com.fastdev.core.transaction.impl.TransactionManagerImpl;
+import com.fastdev.core.util.FileUtil;
 import com.fastdev.core.util.PackageNameUtil;
+import com.fastdev.core.util.StringUtil;
 import com.zaxxer.hikari.HikariDataSource;
 
 /**
@@ -43,16 +45,16 @@ public class Application {
 
 	private Builder builder;
 
-	private Application(Builder builder) {
+	private Application(Builder builder) {  
 		this.builder = builder;
 	}
 
 	synchronized public void run() {
 		builder.server.start(builder.config);
 	}
-
-	public TransactionManager getTransactionManager(String name) {
-		return builder.injector.getBean(name, TransactionManager.class);
+	
+	public Injector getInjector(){
+		return builder.injector;
 	}
 
 	public static Builder builder() {
@@ -68,6 +70,19 @@ public class Application {
 		private ServerProvider server;
 		private Dispatcher dispatcher;
 		private SessionStorage sessionStorage;
+		
+		public Builder loadConfig( String path ){
+			try {
+				
+				InputStream in = FileUtil.loadFileInputStream(path);
+				config.load(in);
+				logger.debug("load config:"+config);
+			} catch (IOException e) {
+				logger.error("load configuration failed");
+				throw new RuntimeException(e);
+			}
+			return this;
+		}
 
 		public Builder config(Config c) {
 			config = c;
@@ -116,15 +131,26 @@ public class Application {
 		}
 
 		public Builder addDataSource(String name, DataSource dataSource, String initSql) {
+			
+			//添加数据源
 			addDataSource(name, dataSource);
-			if (initSql != null) {
+			
+			//执行初始化SQL
+			if ( StringUtil.isNotEmpty(initSql) ) {
+				
 				TransactionManager transactionManager = injector.getBean(name,TransactionManager.class);
+				
+				InputStream in = FileUtil.loadFileInputStream(initSql);
+				if( in==null ){
+					logger.error("cannot find init sql script at path:"+initSql);
+					throw new RuntimeException();
+				}
+				
 				transactionManager.doInTransaction(() -> {
 					SqlRunner sqlRunner = new SqlRunner(transactionManager.getConnection(),
 							new PrintWriter(System.out), new PrintWriter(System.err), true, true);
 					try {
-						sqlRunner.runScript(
-								new InputStreamReader(dataSource.getClass().getClassLoader().getResourceAsStream(initSql)));
+						sqlRunner.runScript(new InputStreamReader(in));
 					} catch (SQLException e) {
 						logger.error("excute init sql error",e);
 					}
@@ -134,9 +160,22 @@ public class Application {
 		}
 
 		public Application build() {
+			
+			//加载配置文件数据源
+			String datasourceNames = config.getProperty(Config.DATASOURCE_NAMES);
+			if(StringUtil.isNotEmpty(datasourceNames)){
+				String[] names = datasourceNames.split(",");
+				for( String name : names ){
+					addDataSource(
+							name, 
+							config.getProperty(name+"."+Config.DATASOURCE_JDBC_URL),
+							config.getProperty(name+"."+Config.DATASOURCE_JDBC_USERNAME),
+							config.getProperty(name+"."+Config.DATASOURCE_JDBC_PASSWARD),
+							config.getProperty(name+"."+Config.DATASOURCE_INIT_SQL)
+					);
+				}
+			}
 
-			// 根据配置路径，扫描包。如果没有配置默认区Main函数所在包扫描
-			injector.scan(config.getProperty(Config.SCAN_PACKAGES, PackageNameUtil.getDefaultPackageName()).split(","));
 
 			// 获取Server
 			ServiceLoader.load(ServerProvider.class).forEach(new Consumer<ServerProvider>() {
@@ -154,14 +193,20 @@ public class Application {
 
 			if (sessionStorage == null) {
 				sessionStorage = new DefaultSessionStorage();
+				injector.addBean("sessionStorage", sessionStorage);
 			}
 
-			interceptors.add(new DefaultSecurityInterceptor(sessionStorage));
+			interceptors.add(new DistributeTokenInterceptor(config,sessionStorage));
 
 			if (dispatcher == null) {
 				dispatcher = new DefaultHandlerDispatcher(interceptors, injector.getHandlers(),injector.getRolesAllowed());
 			}
 			server.setDispatcher(dispatcher);
+			
+			injector.addBean("config", config);
+			
+			// 根据配置路径，扫描包。如果没有配置默认区Main函数所在包扫描
+			injector.scan(config.getProperty(Config.SCAN_PACKAGES, PackageNameUtil.getDefaultPackageName()).split(","));
 
 			return new Application(this);
 		}
