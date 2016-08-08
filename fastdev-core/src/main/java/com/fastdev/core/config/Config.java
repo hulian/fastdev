@@ -48,4 +48,24 @@ public class Config extends Properties{
 	 * Worker Thread 数量
 	 */
 	public static final String SERVER_WORKERS = "server.workers";
+	
+	
+	/**
+	 * 数据源相关配置
+	 */
+	public static final String DATASOURCE_NAMES = "datasource.names";
+	
+	public static final String DATASOURCE_JDBC_URL = "jdbc.url";
+	
+	public static final String DATASOURCE_JDBC_USERNAME  = "jdbc.username";
+	
+	public static final String DATASOURCE_JDBC_PASSWARD = "jdbc.password";
+	
+	public static final String DATASOURCE_INIT_SQL = "init.sql";
+
+	
+	/**
+	 * TOKEN加密密钥
+	 */
+	public static final String TOKEN_KEY = "token.key";
 }
