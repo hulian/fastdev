@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fastdev.core.transaction.InTransaction;
 import com.fastdev.core.transaction.TransactionManager;
+import com.fastdev.core.transaction.WithoutTransaction;
 
 
 
@@ -20,32 +21,32 @@ public class TransactionManagerImpl implements TransactionManager{
 	@Override
 	public  Connection getConnection() {
 		Connection connection = threadLocal.get();
-		if (connection == null) {
-			
-			if(dataSource==null){
-				throw new RuntimeException("cannot find any datasource");
-			}
-			
-			try {
-				connection = getDataSource().getConnection();
-			} catch (Throwable e) {
-				logger.error("Start trsanction failed!"+e);
-				throw new RuntimeException(e);
-			}
-			
-			
-			if(connection==null){
-				throw new RuntimeException("cannot obtain connection from datasource:"+dataSource.getClass());
-			}
-			threadLocal.set(connection);
-			
-		}
 		return connection;
 	}
 	
 	@Override
 	public void start() {
 			Connection connection=getConnection();
+			if (connection == null) {
+				
+				if(dataSource==null){
+					throw new RuntimeException("cannot find any datasource");
+				}
+				
+				try {
+					connection = getDataSource().getConnection();
+				} catch (Throwable e) {
+					logger.error("Start trsanction failed!"+e);
+					throw new RuntimeException(e);
+				}
+				
+				
+				if(connection==null){
+					throw new RuntimeException("cannot obtain connection from datasource:"+dataSource.getClass());
+				}
+				threadLocal.set(connection);
+				
+			}
 			try {
 				connection.setAutoCommit(false);
 			} catch (Throwable e) {
@@ -124,6 +125,19 @@ public class TransactionManagerImpl implements TransactionManager{
 			this.stop();
 		}
 		return;
+	}
+	
+	@Override
+	public <T> T doWithoutTransaction( WithoutTransaction<T> runable ) {
+		try {
+			this.start();
+			return runable.call();
+		} catch (Throwable e) {
+			logger.error("doWithoutTransaction Error:"+e);
+		}finally{
+			this.stop();
+		}
+		return null;
 	}
 
 
