@@ -34,9 +34,12 @@ public class DistributeTokenInterceptor implements Interceptor{
 	
 	private Config config;
 	
+	private long lifetime;
+	
 	public DistributeTokenInterceptor(Config config,SessionStorage sessionStorage) {
 		this.config=config;
 		this.sessionStorage=sessionStorage;
+		this.lifetime=1000*60*60L*Long.parseLong(config.getProperty(Config.SESSION_LIFE_TIME));
 	}
 
 	@Override
@@ -68,8 +71,15 @@ public class DistributeTokenInterceptor implements Interceptor{
 			}
 		}
 		
+		//检查session是否过期
+		if(session.getCreateTime().getTime()+lifetime<System.currentTimeMillis()){
+			return Code.SESSION_EXPIRED;
+		}
+		
+		
 		//检查权限cache
 		Timestamp lifeTime = roleCache.get(token);
+		
 		if( lifeTime!=null ){
 			//设置Session
 			params.put(Params.SESSION, session);

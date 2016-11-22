@@ -45,6 +45,7 @@
 		<module>fastdev-example</module>
 		<module>fastdev-rapidoid</module>
 		<module>fastdev-undertow</module>
+		<module>fastdev-balancer</module>
 	</modules>
 
 	<dependencyManagement>

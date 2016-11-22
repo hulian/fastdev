@@ -68,4 +68,6 @@ public class Config extends Properties{
 	 * TOKEN加密密钥
 	 */
 	public static final String TOKEN_KEY = "token.key";
+
+	public static final String SESSION_LIFE_TIME = "token.lifetime";
 }

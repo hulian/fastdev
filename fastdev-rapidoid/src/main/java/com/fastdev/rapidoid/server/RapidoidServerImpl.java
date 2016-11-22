@@ -16,14 +16,15 @@ public class RapidoidServerImpl implements ServerProvider{
 
 	@Override
 	public void start( Config config) {
-		On.req(new ReqRespHandler() {
-			
-			private static final long serialVersionUID = -4328223652407360220L;
+		On.post("/handlers").json(new ReqRespHandler(){
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Object execute(Req req, Resp resp) throws Exception {
+			public Object execute(Req req, Resp rsp) throws Exception {
 				return dispatcher.dispatch(req.posted());
 			}
+			
 		});
 	}
 

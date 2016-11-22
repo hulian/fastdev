@@ -146,14 +146,16 @@ public class Application {
 					throw new RuntimeException();
 				}
 				
-				transactionManager.doInTransaction(() -> {
-					SqlRunner sqlRunner = new SqlRunner(transactionManager.getConnection(),
-							new PrintWriter(System.out), new PrintWriter(System.err), true, true);
-					try {
-						sqlRunner.runScript(new InputStreamReader(in));
-					} catch (SQLException e) {
-						logger.error("excute init sql error",e);
-					}
+				transactionManager.autoConnection(()->{
+					transactionManager.doInTransaction(() -> {
+						SqlRunner sqlRunner = new SqlRunner(transactionManager.getConnection(),
+								new PrintWriter(System.out), new PrintWriter(System.err), true, true);
+						try {
+							sqlRunner.runScript(new InputStreamReader(in));
+						} catch (SQLException e) {
+							logger.error("excute init sql error",e);
+						}
+					});
 				});
 			}
 			return this;

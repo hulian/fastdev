@@ -14,6 +14,7 @@ public class DefaultConfig extends Config{
 		this.put(Config.SERVER_PORT, "8888");
 		this.put(Config.SERVER_IOTHREADS, String.valueOf(Runtime.getRuntime().availableProcessors()+1));
 		this.put(Config.SERVER_WORKERS, String.valueOf(Runtime.getRuntime().availableProcessors()*100));
+		this.put(Config.SESSION_LIFE_TIME,"24");
 		
 	}
 	

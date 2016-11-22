@@ -21,32 +21,15 @@ public class TransactionManagerImpl implements TransactionManager{
 	@Override
 	public  Connection getConnection() {
 		Connection connection = threadLocal.get();
+		if (connection == null) {
+			throw new RuntimeException("Connection not open");
+		}
 		return connection;
 	}
 	
 	@Override
 	public void start() {
 			Connection connection=getConnection();
-			if (connection == null) {
-				
-				if(dataSource==null){
-					throw new RuntimeException("cannot find any datasource");
-				}
-				
-				try {
-					connection = getDataSource().getConnection();
-				} catch (Throwable e) {
-					logger.error("Start trsanction failed!"+e);
-					throw new RuntimeException(e);
-				}
-				
-				
-				if(connection==null){
-					throw new RuntimeException("cannot obtain connection from datasource:"+dataSource.getClass());
-				}
-				threadLocal.set(connection);
-				
-			}
 			try {
 				connection.setAutoCommit(false);
 			} catch (Throwable e) {
@@ -121,8 +104,6 @@ public class TransactionManagerImpl implements TransactionManager{
 			this.rollback();
 			logger.error("Transaction Error:"+e);
 			throw new RuntimeException("Do in transaction failed! roll back this transaction...",e);
-		}finally{
-			this.stop();
 		}
 		return;
 	}
@@ -130,14 +111,42 @@ public class TransactionManagerImpl implements TransactionManager{
 	@Override
 	public <T> T doWithoutTransaction( WithoutTransaction<T> runable ) {
 		try {
-			this.start();
 			return runable.call();
 		} catch (Throwable e) {
 			logger.error("doWithoutTransaction Error:"+e);
+		}
+		return null;
+	}
+
+	@Override
+	public void autoConnection( InTransaction runable ) {
+		try {
+			this.connect();
+			runable.call();
 		}finally{
 			this.stop();
 		}
-		return null;
+		return;
+	}
+
+	private void connect() {
+		Connection connection = null;
+		if(dataSource==null){
+			throw new RuntimeException("cannot find any datasource");
+		}
+		
+		try {
+			connection = getDataSource().getConnection();
+		} catch (Throwable e) {
+			logger.error("Start trsanction failed!"+e);
+			throw new RuntimeException(e);
+		}
+		
+		
+		if(connection==null){
+			throw new RuntimeException("cannot obtain connection from datasource:"+dataSource.getClass());
+		}
+		threadLocal.set(connection);
 	}
 
 

@@ -11,7 +11,8 @@ public enum Code {
 	TOKEN_EMPTY(-2,"token is empty"),
 	HANDLER_NOT_FOUND(-3,"handler not found"),
 	SESSION_EMPTY(-4,"session empty"),
-	ACCESS_DINIED(-5,"access dinied");
+	ACCESS_DINIED(-5,"access dinied"), 
+	SESSION_EXPIRED(-6,"session expired");
 	
 	private static final Map<Integer, CodeObject> cache = new HashMap<>();
 
