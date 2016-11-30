@@ -19,6 +19,7 @@ public class RegisterHandler implements Handler{
 	@Override
 	public Object call(Map<String, Object> params) {
 		
+		
 		Result result = new Result();
 		
 		try {

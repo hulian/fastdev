@@ -66,17 +66,13 @@ public class RgisterServiceImpl implements RegisterService{
 
 		//创建会员分区信息
 		final UserPartition userPartition = new UserPartition();
-		transactionManager.doInTransaction(()->{
 			
-			userPartition.setUserName(userName);
-			userPartition.setMerchant(merchant);
-			userPartition.setPartitionId(uPartitionInfo.getPartitionId());
+		userPartition.setUserName(userName);
+		userPartition.setMerchant(merchant);
+		userPartition.setPartitionId(uPartitionInfo.getPartitionId());
+		Integer id = userPartitionDao.save(userPartition);
+		userPartition.setUserId(id);
 			
-			Integer id = userPartitionDao.save(userPartition);
-			
-			userPartition.setUserId(id);
-			
-		});
 		
 		return userPartition;
 	}
