@@ -20,6 +20,7 @@ public class TransactionManagerImpl implements TransactionManager{
 	public  Connection getConnection() {
 		Connection connection = threadLocal.get();
 		if (connection == null) {
+			logger.error("Connection not open！");
 			throw new RuntimeException("Connection not open");
 		}
 		return connection;

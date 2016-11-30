@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import com.fastdev.balancer.Constant;
 import com.fastdev.balancer.dao.PartitionInfoDao;
 import com.fastdev.balancer.entity.PartitionInfo;
 import com.fastdev.core.transaction.TransactionManager;
@@ -17,7 +18,7 @@ import com.fastdev.core.transaction.TransactionManager;
 public class PartitionInfoDaoImpl implements PartitionInfoDao{
 	
 	@Inject
-	@Named("auth")
+	@Named(Constant.DATASOURCE_BALANCER)
 	private TransactionManager transactionManager;
 
 	@Override

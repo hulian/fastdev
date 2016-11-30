@@ -13,15 +13,15 @@ import com.fastdev.balancer.dao.PartitionInfoDao;
 import com.fastdev.balancer.dao.UserPartitionDao;
 import com.fastdev.balancer.entity.PartitionInfo;
 import com.fastdev.balancer.entity.UserPartition;
-import com.fastdev.balancer.service.RegisterService;
+import com.fastdev.balancer.service.AllocateService;
 import com.fastdev.core.transaction.TransactionManager;
 import com.fastdev.core.util.StringUtil;
 
 @Singleton
-public class RgisterServiceImpl implements RegisterService{
+public class AllocateServiceImpl implements AllocateService{
 	
 	@Inject
-	@Named(Constant.DATASOURCE_AUTH)
+	@Named(Constant.DATASOURCE_BALANCER)
 	private TransactionManager transactionManager;
 	
 	@Inject
@@ -76,12 +76,5 @@ public class RgisterServiceImpl implements RegisterService{
 		
 		return userPartition;
 	}
-
-	@Override
-	public boolean isUserExisted(String userName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	
 }

@@ -8,7 +8,7 @@ public class ExampleMain {
 	public static void main(String[] args) {
 		
 		Application.builder().loadConfig("config.properties")
-		.server(Server.RAPIDOID)
+		.server(Server.UNDERTOW)
 		.build()
 		.run();
 		
