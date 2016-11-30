@@ -10,6 +10,5 @@ public interface TransactionManager {
 	void rollback();
 	void stop();
 	void doInTransaction( InTransaction runable );
-	<T> T doWithoutTransaction(WithoutTransaction<T> runable);
 	void autoConnection(InTransaction runable);
 }

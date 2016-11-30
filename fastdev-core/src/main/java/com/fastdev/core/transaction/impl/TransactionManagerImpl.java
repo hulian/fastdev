@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.fastdev.core.transaction.InTransaction;
 import com.fastdev.core.transaction.TransactionManager;
-import com.fastdev.core.transaction.WithoutTransaction;
-
 
 
 public class TransactionManagerImpl implements TransactionManager{
@@ -108,15 +106,6 @@ public class TransactionManagerImpl implements TransactionManager{
 		return;
 	}
 	
-	@Override
-	public <T> T doWithoutTransaction( WithoutTransaction<T> runable ) {
-		try {
-			return runable.call();
-		} catch (Throwable e) {
-			logger.error("doWithoutTransaction Error:"+e);
-		}
-		return null;
-	}
 
 	@Override
 	public void autoConnection( InTransaction runable ) {
