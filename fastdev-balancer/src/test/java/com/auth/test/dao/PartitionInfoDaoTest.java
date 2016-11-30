@@ -17,7 +17,7 @@ public class PartitionInfoDaoTest {
 
 	@Test
 	public void testSave() {
-		//7788899
+		//7788899777
 		transactionManager.autoConnection(()->{
 			transactionManager.doInTransaction(() -> {
 
