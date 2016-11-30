@@ -4,9 +4,9 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.auth.test.ApplicationInit;
+import com.fastdev.balancer.dao.UserPartitionDao;
+import com.fastdev.balancer.entity.UserPartition;
 import com.fastdev.core.transaction.TransactionManager;
-import com.ssc.auth.dao.UserPartitionDao;
-import com.ssc.auth.entity.UserPartition;
 
 
 public class UserPartitionDaoTest {
@@ -17,17 +17,18 @@ public class UserPartitionDaoTest {
 	@Test
 	public void testSave(){
 		
-		
-		transactionManager.doInTransaction(()->{
-			
-			UserPartition userPartition = new UserPartition();
-			userPartition.setUserName("test");
-			userPartition.setMerchant("testm");
-			userPartition.setPartitionId(1);
-			Integer id =  userPartitionDao.save(userPartition);
-			
-			Assert.assertEquals(id,new Integer(1));
-			
+		transactionManager.autoConnection(()->{		
+			transactionManager.doInTransaction(()->{
+				
+				UserPartition userPartition = new UserPartition();
+				userPartition.setUserName("test");
+				userPartition.setMerchant("testm");
+				userPartition.setPartitionId(1);
+				Integer id =  userPartitionDao.save(userPartition);
+				
+				Assert.assertEquals(id,new Integer(1));
+				
+			});
 		});
 		
 	}
@@ -36,7 +37,7 @@ public class UserPartitionDaoTest {
 	public void testFind(){
 		
 		
-		transactionManager.doInTransaction(()->{
+		transactionManager.autoConnection(()->{
 			
 			UserPartition userPartition = userPartitionDao.findByUserName("test");
 			Assert.assertNotNull(userPartition);

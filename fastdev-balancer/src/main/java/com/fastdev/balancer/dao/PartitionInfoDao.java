@@ -1,8 +1,8 @@
-package com.ssc.auth.dao;
+package com.fastdev.balancer.dao;
 
 import java.util.List;
 
-import com.ssc.auth.entity.PartitionInfo;
+import com.fastdev.balancer.entity.PartitionInfo;
 
 public interface PartitionInfoDao {
 

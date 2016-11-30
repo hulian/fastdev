@@ -1,4 +1,4 @@
-package com.ssc.auth.entity;
+package com.fastdev.balancer.entity;
 
 //会员分区信息
 public class UserPartition {

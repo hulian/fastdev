@@ -1,4 +1,4 @@
-package com.ssc.auth.dao.impl;
+package com.fastdev.balancer.dao.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,9 +8,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import com.fastdev.balancer.dao.UserPartitionDao;
+import com.fastdev.balancer.entity.UserPartition;
 import com.fastdev.core.transaction.TransactionManager;
-import com.ssc.auth.dao.UserPartitionDao;
-import com.ssc.auth.entity.UserPartition;
 
 @Singleton
 public class UserPartitionDaoImpl implements UserPartitionDao {

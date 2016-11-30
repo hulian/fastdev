@@ -1,4 +1,4 @@
-package com.ssc.auth.service.impl;
+package com.fastdev.balancer.service.impl;
 
 import java.util.Comparator;
 import java.util.List;
@@ -8,14 +8,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import com.fastdev.balancer.Constant;
+import com.fastdev.balancer.dao.PartitionInfoDao;
+import com.fastdev.balancer.dao.UserPartitionDao;
+import com.fastdev.balancer.entity.PartitionInfo;
+import com.fastdev.balancer.entity.UserPartition;
+import com.fastdev.balancer.service.RegisterService;
 import com.fastdev.core.transaction.TransactionManager;
 import com.fastdev.core.util.StringUtil;
-import com.ssc.auth.Constant;
-import com.ssc.auth.dao.PartitionInfoDao;
-import com.ssc.auth.dao.UserPartitionDao;
-import com.ssc.auth.entity.PartitionInfo;
-import com.ssc.auth.entity.UserPartition;
-import com.ssc.auth.service.RegisterService;
 
 @Singleton
 public class RgisterServiceImpl implements RegisterService{
@@ -38,9 +38,7 @@ public class RgisterServiceImpl implements RegisterService{
 			throw new RuntimeException("parameter userName is empty");
 		}
 		
-		UserPartition userPartitionCheck =transactionManager.doWithoutTransaction(()->{
-			 return userPartitionDao.findByUserName(userName);
-		});
+		UserPartition userPartitionCheck = userPartitionDao.findByUserName(userName);
 		if(userPartitionCheck!=null){
 			return userPartitionCheck;
 		}
@@ -50,9 +48,8 @@ public class RgisterServiceImpl implements RegisterService{
 		if(StringUtil.isEmpty(merchant)){
 			throw new RuntimeException("parameter error:merchant is empty");
 		}
-		List<PartitionInfo> partitionInfos = transactionManager.doWithoutTransaction(()->{
-			return partitionInfoDao.findByMerchant(merchant);
-		});
+		
+		List<PartitionInfo> partitionInfos = partitionInfoDao.findByMerchant(merchant);
 		if(partitionInfos.size()==0){
 			throw new RuntimeException("partitioninfo not found for merchant:"+merchant);
 		}

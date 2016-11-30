@@ -1,4 +1,4 @@
-package com.ssc.auth.dao.impl;
+package com.fastdev.balancer.dao.impl;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,9 +8,10 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import com.fastdev.balancer.dao.PartitionInfoDao;
+import com.fastdev.balancer.entity.PartitionInfo;
 import com.fastdev.core.transaction.TransactionManager;
-import com.ssc.auth.dao.PartitionInfoDao;
-import com.ssc.auth.entity.PartitionInfo;
 
 @Singleton
 public class PartitionInfoDaoImpl implements PartitionInfoDao{

@@ -1,4 +1,4 @@
-package com.ssc.auth;
+package com.fastdev.balancer;
 
 public class Result {
 

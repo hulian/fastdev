@@ -1,6 +1,6 @@
-package com.ssc.auth.service;
+package com.fastdev.balancer.service;
 
-import com.ssc.auth.entity.UserPartition;
+import com.fastdev.balancer.entity.UserPartition;
 
 public interface RegisterService {
 	

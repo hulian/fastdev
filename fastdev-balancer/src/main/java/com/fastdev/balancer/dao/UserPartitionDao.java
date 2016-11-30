@@ -1,6 +1,6 @@
-package com.ssc.auth.dao;
+package com.fastdev.balancer.dao;
 
-import com.ssc.auth.entity.UserPartition;
+import com.fastdev.balancer.entity.UserPartition;
 
 public interface UserPartitionDao {
 

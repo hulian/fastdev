@@ -1,4 +1,4 @@
-package com.ssc.auth.entity;
+package com.fastdev.balancer.entity;
 
 //分区表
 public class PartitionInfo {
