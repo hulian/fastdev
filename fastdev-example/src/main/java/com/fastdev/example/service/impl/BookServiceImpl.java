@@ -22,10 +22,7 @@ public class BookServiceImpl implements BookService{
 	@Override
 	public void createBook(Book book) {
 		
-		transactionManager.doInTransaction(()->{
-			book.setId(bookDao.createBook(book));
-			return;
-		});
+		book.setId(bookDao.createBook(book));
 		
 	}
 
